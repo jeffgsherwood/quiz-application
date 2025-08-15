@@ -2,6 +2,15 @@
 
 Quiz Application is a full-stack web application designed to provide users with an interactive platform for taking quizzes. The system is built with a RESTful API using Spring Boot, a MySQL database for data persistence, and a React-based frontend. This project incorporates a database schema for quizzes, questions, and user history, with the intention of being hosted on AWS Elastic Beanstalk and an integrated database on AWS RDS.
 
+## Project Status
+
+| Component | Status | Description |
+|---|---|---|
+| **Database** | ✅ Complete | MySQL database with a fully normalized schema (`quizzes`, `questions`, `answers`, `users`, `quiz_history`). Includes `schema.sql` and `data.sql` for easy setup. |
+| **Backend API** | ✅ Complete | RESTful API built with Spring Boot. Provides endpoints for quiz retrieval and grading. Includes all necessary controllers, services, repositories, and models. |
+| **Frontend** | ⏳ In Progress | A React SPA is planned to consume the backend API and provide the user interface. Components include the quiz list, quiz taking, and results pages. |
+| **Deployment** | ⏳ In Progress | The application is designed to be deployed to AWS Elastic Beanstalk and AWS RDS. |
+
 ## Features
 
 - ✅ Displays a list of available quizzes, broken down by subject.
@@ -13,7 +22,7 @@ Quiz Application is a full-stack web application designed to provide users with 
 - ✅ Supports multiple question types (e.g., multiple-choice) with a `type` column in the `questions` table.
 - ✅ Backend built with Java and Spring Boot.
 - ✅ Planned deployment to **AWS Elastic Beanstalk** with an integrated database on **AWS RDS**.
-- ✅ Frontend built with React, TypeScript, HTML, and CSS.
+- ⏳ Frontend built with React, TypeScript, HTML, and CSS.
 
 ## How to Use
 
@@ -40,20 +49,20 @@ Quiz Application is a full-stack web application designed to provide users with 
 
 ## Tech Stack
 
-- **Backend**: Spring Boot
-- **Database**: MySQL
-- **Frontend**: React (with TypeScript, HTML, and CSS)
-- **Deployment**: AWS Elastic Beanstalk and AWS RDS
-- **Tools**: Maven, Spring Data JPA, Lombok
+-   **Backend**: Spring Boot
+-   **Database**: MySQL
+-   **Frontend**: React (with TypeScript, HTML, and CSS)
+-   **Deployment**: AWS Elastic Beanstalk and AWS RDS
+-   **Tools**: Maven, Spring Data JPA, Lombok
 
 ## Coming Soon
 
-- **AWS Deployment**: Deploying the application to AWS Elastic Beanstalk.
-- **CI/CD Pipeline**: Setting up a continuous integration/continuous deployment pipeline.
-- **Timer for Quizzes**: Adding a timer to each quiz attempt.
-- **User Authentication**: Implementing full user login and registration functionality.
-- **Quiz History Page**: A dedicated page for users to view their past quiz scores.
-- **Multiple Question Types**: Expanding question types beyond multiple-choice.
+-   **AWS Deployment**: Deploying the application to AWS Elastic Beanstalk.
+-   **CI/CD Pipeline**: Setting up a continuous integration/continuous deployment pipeline.
+-   **Timer for Quizzes**: Adding a timer to each quiz attempt.
+-   **User Authentication**: Implementing full user login and registration functionality.
+-   **Quiz History Page**: A dedicated page for users to view their past quiz scores.
+-   **Multiple Question Types**: Expanding question types beyond multiple-choice.
 
 ## Author
 
