@@ -1,5 +1,6 @@
 package com.jeffquizapp.quizapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id", nullable = false)
+    @JsonIgnore
     private Quiz quiz;
 
     @NotNull
