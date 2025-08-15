@@ -2,6 +2,7 @@ package com.jeffquizapp.quizapplication.controller;
 
 import com.jeffquizapp.quizapplication.dto.QuizSubmissionDto;
 import com.jeffquizapp.quizapplication.model.Quiz;
+import com.jeffquizapp.quizapplication.model.Question;
 import com.jeffquizapp.quizapplication.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,12 @@ public class QuizController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}/questions")
+    public ResponseEntity<List<Question>> getQuestionsByQuizId(@PathVariable Long id) {
+        return ResponseEntity.ok(quizService.getQuestionsByQuizId(id));
+    }
+
     @PostMapping("/submit")
     public ResponseEntity<Integer> submitQuiz(@RequestBody QuizSubmissionDto submission) {
         int score = quizService.gradeQuiz(submission);

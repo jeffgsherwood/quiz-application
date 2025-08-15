@@ -1,5 +1,6 @@
 package com.jeffquizapp.quizapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,5 +36,6 @@ public class Quiz {
     private List<Question> questions;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<QuizHistory> quizHistory;
 }

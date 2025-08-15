@@ -41,6 +41,9 @@ public class QuizService {
     public Optional<Quiz> getQuizById(Long id) {
         return quizRepository.findById(id);
     }
+    public List<Question> getQuestionsByQuizId(Long quizId) {
+        return questionRepository.findByQuizId(quizId);
+    }
 
     public int gradeQuiz(QuizSubmissionDto submission) {
         Optional<Quiz> quizOptional = quizRepository.findById(submission.getQuizId());
