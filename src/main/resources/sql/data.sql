@@ -1,5 +1,17 @@
 -- data.sql (added answers for @q1 to @q112 based on accurate facts from web search; ensured matching with question types; cleaned up and completed for all quizzes)
 USE quiz_application;
+-- clear_database.sql
+-- Step 1: Disable foreign key checks to allow truncating tables with dependencies
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Step 2: Truncate tables to remove all data and reset auto-increment counters
+TRUNCATE TABLE quiz_history;
+TRUNCATE TABLE answers;
+TRUNCATE TABLE questions;
+TRUNCATE TABLE quizzes;
+
+-- Step 3: Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- Step 1: Disable safe update mode temporarily
 SET SQL_SAFE_UPDATES = 0;
