@@ -5,11 +5,20 @@ import java.util.Map;
 public class QuizSubmissionDto {
 
     private Long quizId;
-    private Long userId; // New field for the user ID
+    private Long userId;
     private Map<Long, String> answers;
 
-    // Getters and Setters
+    public QuizSubmissionDto() {
+        // Default constructor
+    }
 
+    public QuizSubmissionDto(Long quizId, Long userId, Map<Long, String> answers) {
+        this.quizId = quizId;
+        this.userId = userId;
+        this.answers = answers;
+    }
+
+    // Getters and Setters
     public Long getQuizId() {
         return quizId;
     }

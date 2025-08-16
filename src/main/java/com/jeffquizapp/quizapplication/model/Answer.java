@@ -24,4 +24,16 @@ public class Answer {
     @Size(min = 1, max = 255)
     @Column(name = "answer_text", nullable = false, length = 255)
     private String answerText;
+
+    // Added the isCorrect field and its getter/setter
+    @Column(name = "is_correct", nullable = false)
+    private Boolean isCorrect;
+
+    public Boolean getIsCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(Boolean isCorrect) {
+        this.isCorrect = isCorrect;
+    }
 }

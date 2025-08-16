@@ -44,3 +44,19 @@ CREATE TABLE quiz_history (
 -- Add the 'type' column to the 'questions' table
 ALTER TABLE questions
 ADD COLUMN type VARCHAR(50) NOT NULL DEFAULT 'multiple_choice';
+
+
+
+ALTER TABLE questions
+DROP COLUMN correct_answer;
+ALTER TABLE answers
+ADD COLUMN is_correct BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE questions
+DROP COLUMN correct_answer;
+
+ALTER TABLE answers
+ADD COLUMN is_correct BOOLEAN NOT NULL DEFAULT FALSE;
+
+INSERT INTO users (id, username, password, email)
+VALUES (1, 'testuser', 'testpassword', 'test@example.com');

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -40,6 +39,11 @@ public class QuizService {
 
     public Optional<Quiz> getQuizById(Long id) {
         return quizRepository.findById(id);
+    }
+    
+    // New method to get all questions for a specific quiz
+    public List<Question> getQuestionsByQuizId(Long quizId) {
+        return questionRepository.findByQuizId(quizId);
     }
 
     public int gradeQuiz(QuizSubmissionDto submission) {
