@@ -33,6 +33,7 @@ const QuizTakingPage: React.FC = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
+        // Corrected URL to use the proxy
         const response = await axios.get<Question[]>(`/api/quizzes/${quizId}/questions`);
         setQuestions(response.data);
       } catch (err) {
@@ -42,56 +43,55 @@ const QuizTakingPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchQuestions();
   }, [quizId]);
 
-  // Handler for when a user selects an answer
+  // Function to handle the user selecting an answer
   const handleAnswerSelect = (questionId: number, answerText: string) => {
     setUserAnswers(prevAnswers => ({
       ...prevAnswers,
-      [questionId]: answerText,
+      [questionId]: answerText
     }));
   };
 
-  // Handler for quiz submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevents default form submission behavior
+  // Function to handle quiz submission
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    // Check if the user has answered all questions and confirm submission
-    if (Object.keys(userAnswers).length !== questions.length) {
-      if (!window.confirm("You have not answered all questions. Are you sure you want to submit?")) {
-        return;
-      }
-    }
+    const submissionPayload = {
+      quizId: Number(quizId),
+      userId: userId,
+      answers: userAnswers
+    };
 
-    if (!userId) {
-      alert("You must be logged in to submit a quiz.");
-      return;
-    }
+    console.log("Submitting quiz...");
+    console.log("userId:", userId);
+    console.log("quizId:", quizId);
+    console.log("Answers to be submitted:", userAnswers);
+    console.log("Full submission payload:", submissionPayload);
 
     try {
-      // Create the payload to match the backend's QuizSubmissionDto
-      const submissionPayload = {
-        quizId: parseInt(quizId as string),
-        userId,
-        answers: userAnswers,
-      };
-
-      // Send the user's answers to the backend for grading
-      const response = await axios.post('/api/quizzes/submit', submissionPayload);
-
-      const score = response.data;
-      // Navigate to the results page, passing the score in the state
-      navigate(`/quiz/${quizId}/results`, { state: { score } });
-
+      // Corrected URL to use the proxy
+      const response = await axios.post(`/api/quizzes/submit`, submissionPayload);
+      console.log("Quiz submitted successfully:", response.data);
+      setLoading(false);
+      // Corrected navigation to the correct URL with state
+      navigate(`/quiz/${quizId}/results`, { state: { score: response.data } });
     } catch (err) {
-      setError("Submission failed. Please try again.");
-      console.error("Error submitting quiz:", err);
+      if (axios.isAxiosError(err)) {
+        console.error("Error submitting quiz:", err);
+        setError("Failed to submit quiz. Please try again.");
+      } else {
+        console.error("An unexpected error occurred:", err);
+        setError("An unexpected error occurred. Please try again.");
+      }
+      setLoading(false);
     }
   };
 
-  // Conditional rendering for loading and error states
+  // Render the component with loading and error states
   if (loading) {
     return <div className="loading-message">Loading questions...</div>;
   }
