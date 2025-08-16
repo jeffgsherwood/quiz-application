@@ -1,62 +1,55 @@
 USE quiz_application;
+
+-- Step 1: Disable foreign key checks to allow dropping tables in any order
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Step 2: Drop tables with foreign keys first to avoid conflicts
+DROP TABLE IF EXISTS quiz_history;
+DROP TABLE IF EXISTS answers;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS quizzes;
+DROP TABLE IF EXISTS users;
+
+-- Step 3: Create tables with BIGINT for primary keys and foreign keys
 CREATE TABLE quizzes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     subject VARCHAR(100) NOT NULL,
-    description TEXT,
-    num_questions INT NOT NULL
+    description TEXT
 );
 
 CREATE TABLE questions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    quiz_id INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    quiz_id BIGINT NOT NULL,
     question_text TEXT NOT NULL,
-    correct_answer VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'multiple_choice',
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
 
 CREATE TABLE answers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    question_id INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    question_id BIGINT NOT NULL,
     answer_text VARCHAR(255) NOT NULL,
+    is_correct BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (question_id) REFERENCES questions(id)
 );
 
--- Table for user authentication
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL, -- This should be a hashed password in a real application
     email VARCHAR(255) UNIQUE
 );
 
--- Table to track user quiz attempts
 CREATE TABLE quiz_history (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    quiz_id INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    quiz_id BIGINT NOT NULL,
     score INT NOT NULL,
     submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
 
--- Add the 'type' column to the 'questions' table
-ALTER TABLE questions
-ADD COLUMN type VARCHAR(50) NOT NULL DEFAULT 'multiple_choice';
-
-
-
-ALTER TABLE questions
-DROP COLUMN correct_answer;
-ALTER TABLE answers
-ADD COLUMN is_correct BOOLEAN NOT NULL DEFAULT FALSE;
-
-ALTER TABLE questions
-DROP COLUMN correct_answer;
-
-ALTER TABLE answers
-ADD COLUMN is_correct BOOLEAN NOT NULL DEFAULT FALSE;
-
-INSERT INTO users (id, username, password, email)
-VALUES (1, 'testuser', 'testpassword', 'test@example.com');
+-- Step 4: Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
