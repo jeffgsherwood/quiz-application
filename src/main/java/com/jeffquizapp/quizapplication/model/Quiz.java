@@ -1,5 +1,7 @@
+// Quiz.java (added @JsonIgnore to questions and quizHistory to prevent serialization of lazy collections)
 package com.jeffquizapp.quizapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,9 +33,11 @@ public class Quiz {
     @Column(name = "num_questions")
     private int numQuestions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuizHistory> quizHistory;
 }

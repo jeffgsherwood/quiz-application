@@ -1,9 +1,9 @@
+// Question.java (removed correct_answer as grading now uses is_correct from answers)
 package com.jeffquizapp.quizapplication.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -24,19 +24,13 @@ public class Question {
     private String questionText;
 
     @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "correct_answer", nullable = false, length = 255)
-    private String correctAnswer;
-
-    @NotNull
-    @Size(min = 1, max = 50)
     @Column(nullable = false, length = 50)
     private String type;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers;
 
-    // Getters and Setters manually added to resolve compilation issues
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -59,14 +53,6 @@ public class Question {
 
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
     }
 
     public String getType() {

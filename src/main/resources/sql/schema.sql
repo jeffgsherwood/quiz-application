@@ -1,3 +1,4 @@
+-- schema.sql (removed correct_answer column as it's no longer needed for grading)
 USE quiz_application;
 
 -- Step 1: Disable foreign key checks to allow dropping tables in any order
@@ -15,7 +16,8 @@ CREATE TABLE quizzes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     subject VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    num_questions INT DEFAULT 0
 );
 
 CREATE TABLE questions (

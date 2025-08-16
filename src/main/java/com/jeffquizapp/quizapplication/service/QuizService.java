@@ -1,3 +1,4 @@
+// QuizService.java (updated gradeQuiz to use is_correct from answers for grading, supporting both multiple_choice and multiple_answer; questions fetched with answers via repository)
 package com.jeffquizapp.quizapplication.service;
 
 import com.jeffquizapp.quizapplication.dto.QuizSubmissionDto;
@@ -13,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -23,7 +27,6 @@ public class QuizService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final QuizHistoryRepository quizHistoryRepository;
-
 
     @Autowired
     public QuizService(QuizRepository quizRepository, QuestionRepository questionRepository, UserRepository userRepository, QuizHistoryRepository quizHistoryRepository) {
@@ -40,8 +43,7 @@ public class QuizService {
     public Optional<Quiz> getQuizById(Long id) {
         return quizRepository.findById(id);
     }
-    
-    // New method to get all questions for a specific quiz
+
     public List<Question> getQuestionsByQuizId(Long quizId) {
         return questionRepository.findByQuizId(quizId);
     }
@@ -57,17 +59,38 @@ public class QuizService {
         Quiz quiz = quizOptional.get();
         User user = userOptional.get();
         int score = 0;
-        int totalQuestions = quiz.getQuestions().size();
-
         List<Question> questions = questionRepository.findByQuizId(quiz.getId());
+        int totalQuestions = questions.size();
 
         for (Question question : questions) {
-            String submittedAnswer = submission.getAnswers().get(question.getId());
-            if (submittedAnswer != null && submittedAnswer.equalsIgnoreCase(question.getCorrectAnswer())) {
+            List<String> submitted = submission.getAnswers().getOrDefault(question.getId(), List.of());
+            Set<String> submittedSet = new HashSet<>(submitted);
+
+            List<String> correctAnswers = question.getAnswers().stream()
+                    .filter(a -> a.getIsCorrect())
+                    .map(a -> a.getAnswerText())
+                    .collect(Collectors.toList());
+
+            boolean allCorrectSelected = true;
+            boolean noIncorrectSelected = true;
+
+            for (String correct : correctAnswers) {
+                if (!submittedSet.contains(correct)) {
+                    allCorrectSelected = false;
+                }
+            }
+
+            for (String submittedAnswer : submitted) {
+                if (!correctAnswers.contains(submittedAnswer)) {
+                    noIncorrectSelected = false;
+                }
+            }
+
+            if (allCorrectSelected && noIncorrectSelected && !submitted.isEmpty()) {
                 score++;
             }
         }
-        
+
         int percentageScore = (int) Math.round((double) score / totalQuestions * 100);
 
         // Save the quiz history
